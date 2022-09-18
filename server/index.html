@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <title>check</title>
+    <meta charset="UTF-8" />
+    <script>
+      async function loadItems() {
+        const response = await fetch('http://localhost:3000/api/check');
+        const data = await response.json();
+        console.log(data);
+      }
+      loadItems();
+      async function createItem() {
+        const response = await fetch('http://localhost:3000/api/check', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: 'Сходить за хлебом',
+            owner: 'Тимофей',
+          }),
+        });
+        const data = await response.json();
+        console.log(data);
+      }
+      // createItem();
+
+      async function getItem() {
+        const response = await fetch('http://localhost:3000/api/check/1608029025426');
+        const data = await response.json();
+        console.log(data);
+      }
+
+      async function markAsDone() {
+        const response = await fetch('http://localhost:3000/api/check/1608029025426', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ done: true }),
+        });
+        const data = await response.json();
+        console.log(data);
+      }
+
+      async function deleteItem() {
+        const response = await fetch('http://localhost:3000/api/check/1608029025426', {
+          method: 'DELETE',
+        });
+        if (response.status === 404)
+          console.log('Не удалось удалить дело, так как его не существует');
+        const data = await response.json();
+        console.log(data);
+      }
+    </script>
+  </head>
+  <body></body>
+</html>
