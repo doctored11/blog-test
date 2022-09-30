@@ -1,34 +1,75 @@
-// async function loadItems() {
-//   const response = await fetch('http://localhost:3000/api/check');
-//   const data = await response.json();
-//   console.log(data);
-// }
-// loadItems(); public/v2/posts?page=1
-async function getList() {
-  const response = await fetch('https://gorest.co.in/public/v2/posts?page=1', {
+let plusPage = document.querySelector('.page-plus');
+let minusPage = document.querySelector('.page-minus');
+let pageN = document.querySelector('.page-num');
+
+let n = getPageId();
+
+getList(n);
+pageControll(n);
+
+plusPage.addEventListener('click', () => {
+  let n = getPageId() || 1;
+  pagePlus(n);
+});
+minusPage.addEventListener('click', () => {
+  let n = getPageId() || 1;
+  pageMinus(n);
+});
+
+// ↓↑
+
+async function getList(n) {
+  const response = await fetch(`https://gorest.co.in/public/v2/posts?page=${n}`, {
     //от 1 до 149 вкл
     method: 'Get',
     headers: { 'Content-Type': 'application/json' },
   });
   const data = await response.json();
   console.log(data);
+  // return data;
+  //функция возвращает promise, поэтому вызов отрисовки тут↓
+  fillNavigation(data);
 }
-async function getComms() {
-  const response = await fetch('https://gorest.co.in/public/v2/comments?post_id=4', {
-    method: 'Get',
-    headers: { 'Content-Type': 'application/json' },
-  });
-  const data = await response.json();
-  console.log(data);
+
+//запросы↑
+//вспомогательные  фи↓
+
+let linksBlock = document.querySelector('.links-block');
+
+function fillNavigation(data) {
+  for (let i = 0; i < data.length; ++i) {
+    addNavLink(data[i]);
+  }
 }
-async function getItem() {
-  const response = await fetch('https://gorest.co.in/public/v2/posts/15', {
-    method: 'Get',
-    headers: { 'Content-Type': 'application/json' },
-  });
-  const data = await response.json();
-  console.log(data);
+function pagePlus(n) {
+  linksClear();
+  n++;
+  open(`index.html?=${n}`); // по хорошему открывать в том же окне
 }
-getList();
-getComms();
-getItem();
+function pageMinus(n) {
+  linksClear();
+  n--;
+  open(`index.html?=${n}`);
+}
+function linksClear() {
+  linksBlock.innerHTML = '';
+}
+
+function addNavLink(n) {
+  let bufLink = document.createElement('a');
+  bufLink.href = `page.html?post=${n.id} `;
+  bufLink.textContent = `${n.title}`;
+  bufLink.classList.add('nav-link');
+  linksBlock.append(bufLink);
+}
+
+//повтор функции из page.js (
+function getPageId() {
+  let buf = document.location.href.split('=')[1];
+  console.log(buf);
+  return buf;
+}
+
+function pageControll(n) {
+  pageN.textContent = n;
+}
