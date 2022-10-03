@@ -44,13 +44,14 @@ function fillNavigation(data) {
 function pagePlus(n) {
   linksClear();
   n++;
-  open(`index.html?=${n}`); // по хорошему открывать в том же окне
+  open(`index.html?=${n}`, '_self', false);
 }
 function pageMinus(n) {
   linksClear();
   n--;
-  open(`index.html?=${n}`);
+  open(`index.html?=${n}`, '_self', false);
 }
+
 function linksClear() {
   linksBlock.innerHTML = '';
 }

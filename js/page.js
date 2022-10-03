@@ -14,6 +14,7 @@ async function getComms() {
   });
   const data = await response.json();
   console.log(data);
+
   addComments(data); //приходится вызывать тут (
   return data; //promise(
 }
